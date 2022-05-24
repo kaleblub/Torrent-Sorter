@@ -42,44 +42,75 @@ from pathlib import Path
 '''
 
 # Folder to check for new Folders or Files
-VIDEOS_PATH = "~/Videos/"
+VIDEOS_PATH = "/home/epoch/Videos/"
 
 # Paths to the movie/show folders
 MOVIES_PATH = "/run/media/epoch/Video/Videos/Movies/"
 SHOWS_PATH = "/run/media/epoch/Video/Videos/Shows/"
 
 videosFolder = Path(VIDEOS_PATH)
-movieFolders = Path(MOVIES_PATH)
-showFolders = Path(SHOWS_PATH)
+moviesFolder = Path(MOVIES_PATH)
+showsFolder = Path(SHOWS_PATH)
 
-movieFilesList = []
-showsFilesList = []
+# Add FOLDERS/FILES that you want to be overlooked
+FOLDERS_FILES_TO_SKIP = ['temp', 'Torrent-Sorter']
 
-''' Recursive Function To Find All Files In File Structure '''
-def getAllFiles(item, fileList):
-	# If the item is a file, add it to the list of movies
-	if item.is_file():
-		fileList.append(item)
-	elif item.is_dir():
-		getAllFiles(item, )
+# movieFilesList = []
+# showsFilesList = []
 
+# ''' Recursive Function To Find All Files In File Structure '''
+# def getAllFiles(item, fileList):
+# 	# If the item is a file, add it to the list of movies
+# 	if item.is_file():
+# 		fileList.append(item)
+# 	elif item.is_dir():
+# 		getAllFiles(item, )
 
-def main():
-	print()
 
 def printMovieDestinationFolder():
 	print("------- Movie Folders -------")
-	for item in movieFolders.iterdir():
+	for item in moviesFolder.iterdir():
 		if item.is_file():
-			print(item)
+			print(item.name)
 		else:
 			for file in item.iterdir():
-				print(file)
+				print(file.name)
 
 def printShowDestinationFolder():
 	print("------- Show Folders -------")
-	for show in showFolders.iterdir():
-		print(show)
+	for show in showsFolder.iterdir():
+		print(show.name)
+
+def checkForNewDownloads():
+	new_downloads = []
+	for item in videosFolder.iterdir():
+		if item.name in FOLDERS_FILES_TO_SKIP:
+			pass
+		else:
+			new_downloads.append(item)
+	if len(new_downloads) == 0:
+		return(None)
+	else:
+		return(new_downloads) # Should be changed to return the list of the newly downloaded files or folders found 
+
+def 
+
+def renameFolder(folder):
+	pass
+
+def renameFile(file):
+	pass
+
+def main():
+	# Check Videos Origin Folder
+	newDownloads = checkForNewDownloads()
+	if not newDownloads:
+		print("No new torrents at this time...\nRescheduling...")
+		exit()
+	else:
+		print("New Downloads Found:")
+		for item in newDownloads:
+			print(item.name)
 
 if __name__ == "__main__":
 	main()
