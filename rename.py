@@ -1,20 +1,17 @@
 import os
+import re
 
 from datetime import datetime
 from pathlib import Path
 
-''' --- GOALS ---
-  ~ Change all spaces to periods.
-	IE: (movieFolers = os.listdir()
-	   for title in movieFolders:
+'''
+	movieFolders = os.listdir()
+	for title in movieFolders:
 		print(title.replace(' ', '.'))
-	    )
-
-  ~ Save the file type for after all string manipulations
-  ~ Remove all text after the Movie Title, Release Date, and Resolution
-	IE: (spider-man.into.the.spider-verse.2018.720p.bluray.x264-nezu.mkv
-		The.Suicide.Squad.2021.720p.HMAX.WEBRip.900MB.x264-GalaxyRG.mkv
-		The.Chronicles.of.Narnia.The.Lion.The.Witch.And.The.Wardrobe.2005.720p.Brrip.x264.Deceit.YIFY.mp4)
+	
+	spider-man.into.the.spider-verse.2018.720p.bluray.x264-nezu.mkv
+	The.Suicide.Squad.2021.720p.HMAX.WEBRip.900MB.x264-GalaxyRG.mkv
+	The.Chronicles.of.Narnia.The.Lion.The.Witch.And.The.Wardrobe.2005.720p.Brrip.x264.Deceit.YIFY.mp4)
 
 --- Pseudo Code ---
 1 Check the ~/Videos/ Folder to see if there are any other files/folders than 'temp'
@@ -38,7 +35,6 @@ from pathlib import Path
 								For each File
 									Strip everything after the 4 digit date of the video file
 										move folder into movies path
-
 '''
 
 # Folder to check for new Folders or Files
@@ -54,18 +50,6 @@ showsFolder = Path(SHOWS_PATH)
 
 # Add FOLDERS/FILES that you want to be overlooked
 FOLDERS_FILES_TO_SKIP = ['temp', 'Torrent-Sorter']
-
-# movieFilesList = []
-# showsFilesList = []
-
-# ''' Recursive Function To Find All Files In File Structure '''
-# def getAllFiles(item, fileList):
-# 	# If the item is a file, add it to the list of movies
-# 	if item.is_file():
-# 		fileList.append(item)
-# 	elif item.is_dir():
-# 		getAllFiles(item, )
-
 
 def printMovieDestinationFolder():
 	print("------- Movie Folders -------")
@@ -93,24 +77,39 @@ def checkForNewDownloads():
 	else:
 		return(new_downloads) # Should be changed to return the list of the newly downloaded files or folders found 
 
-def 
+# def 
 
 def renameFolder(folder):
 	pass
 
 def renameFile(file):
-	pass
+	print(file.name)
+	print(re.search(r'[0-9]+(.*?){}'.format(file.suffix), file.name))
+	print()
+
+def renameShowFile(file):
+	print(re.search(r'S[0-9]E[0-9]+(.*?){}'.format(file_suffix), file.name))
+	print()	
 
 def main():
 	# Check Videos Origin Folder
 	newDownloads = checkForNewDownloads()
+	
+	# If there are no new downloads in the folder to check
+	# Then exit() and try again later.
 	if not newDownloads:
 		print("No new torrents at this time...\nRescheduling...")
 		exit()
+	# Else if there are new files other than the files/folders to overlook
+	# Then continue with the rest of the process
 	else:
 		print("New Downloads Found:")
 		for item in newDownloads:
 			print(item.name)
+			for file in item.iterdir():
+				print("\t|-" + file.name)
+				# print(dir(file))
+				# print(os.path.splitext(file.name))
 
 if __name__ == "__main__":
 	main()
